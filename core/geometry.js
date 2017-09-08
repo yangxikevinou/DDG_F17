@@ -341,9 +341,7 @@ class Geometry {
 	 * @returns {number}
 	 */
 	scalarGaussCurvature(v) {
-		// TODO
-
-		return 0.0; // placeholder
+		return this.angleDefect(v);
 	}
 
 	/**
