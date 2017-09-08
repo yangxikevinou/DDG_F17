@@ -105,7 +105,7 @@ describe("VectorFieldDecomposition", function() {
 	});
 
 	describe("HarmonicBases: compute", function() {
-		it("computes the harmonic component of a 1-form; this tests checks whether the bases are linearly independent", function() {
+		it("computes the harmonic component of a 1-form; this test checks whether the bases are linearly independent", function() {
 			// build generators
 			hodgeDecomposition = new HodgeDecomposition(geometry);
 			let treeCotree = new TreeCotree(mesh);
