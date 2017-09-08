@@ -1,6 +1,6 @@
-# geometry-processing-js
+# ddg-exercises-js
 
-geometry-processing-js is a framework for interactive geometry processing in the web!
+ddg-exercises-js is a framework for interactive geometry processing in the web!
 It is designed to be fast and easy to work with, which makes it suitable for coursework
 and for releasing demos.
 
@@ -17,7 +17,7 @@ and tests directories of this [repository](https://github.com/cmu-geometry/ddg-e
 1. Clone the repository and change into the projects directory
 ```
 git clone https://github.com/cmu-geometry/ddg-exercises-js.git
-cd geometry-processing-js/projects
+cd ddg-exercises-js/projects
 ```
 
 2. Open the index.html file in any of the sub directories in a browser of your choice
