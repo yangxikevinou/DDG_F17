@@ -10,13 +10,13 @@ code for various geometry processing algorithms. Each algorithm comes with its o
 viewer for rendering.
 
 Detailed documentation and unit tests for each of these parts can be found in the docs
-and tests directories of this [repository](https://github.com/cmu-geometry/geometry-processing-js).
+and tests directories of this [repository](https://github.com/cmu-geometry/ddg-exercises-js).
 
 ## Getting started
 
 1. Clone the repository and change into the projects directory
 ```
-git clone https://github.com/cmu-geometry/geometry-processing-js.git
+git clone https://github.com/cmu-geometry/ddg-exercises-js.git
 cd geometry-processing-js/projects
 ```
 
