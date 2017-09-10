@@ -35,7 +35,7 @@ the more optimized sparse matrix library [Suitesparse](http://faculty.cse.tamu.e
 
 ## About Javascript
 
-The implementation of geometry-processing-js attempts to minimize the use of obscure
+The implementation of ddg-exercises-js attempts to minimize the use of obscure
 Javascript language features. It should not be too difficult for anyone with experience
 in a dynamic language like Python or familiar with the principles of Object Oriented Programming
 to get a handle on Javascript syntax by reading through some of the code in this framework.
