@@ -1,8 +1,12 @@
 # ddg-exercises-js
 
-ddg-exercises-js is a framework for interactive geometry processing in the web!
-It is designed to be fast and easy to work with, which makes it suitable for coursework
-and for releasing demos.
+ddg-exercises-js is a fast and flexible framework for 3D geometry processing
+on the web! Easy integration with HTML/WebGL makes it particularly suitable for
+things like mobile apps, online demos, and course content. For many tasks,
+performance comes within striking distance of native (C++) code. Plus, since the
+framework is pure JavaScript, **no compilation or installation** is necessary on any
+platform. Moreover, geometry processing algorithms can be **edited in the browser**
+(using for instance the [JavaScript Console](https://developers.google.com/web/tools/chrome-devtools/console/) in Chrome).
 
 At a high level, the framework is divided into three parts - an implementation of
 a halfedge mesh data structure, an optimized linear algebra package and skeleton
