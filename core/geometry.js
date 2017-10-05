@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 class Geometry {
 	/**
@@ -199,9 +199,9 @@ class Geometry {
 	 * @returns {number}
 	 */
 	cotan(h) {
-		// TODO
-
-		return 0.0; // placeholder
+		let u=this.vector(h.next).negated();
+		let v=this.vector(h.prev);
+		return (u.dot(v))/((u.cross(v)).norm());
 	}
 
 	/**
@@ -224,9 +224,11 @@ class Geometry {
 	 * @returns {number}
 	 */
 	barycentricDualArea(v) {
-		// TODO
-
-		return 0.0; // placeholder
+		let a=0.0;
+		for (let f of v.adjacentFaces()){
+			a+=this.area(f);
+		}
+		return a/3;
 	}
 
 	/**
@@ -237,9 +239,13 @@ class Geometry {
 	 * @returns {number}
 	 */
 	circumcentricDualArea(v) {
-		// TODO
-
-		return 0.0; // placeholder
+		let a=0.0;
+		for (let h of v.adjacentHalfedges()){
+			a+=this.cotan(h)*Math.pow(this.length(h),2);
+			h=h.twin;
+			a+=this.cotan(h)*Math.pow(this.length(h),2);
+		}
+		return a/8;
 	}
 
 	/**
