@@ -22,9 +22,10 @@ class MeanCurvatureFlow {
 	 * @returns {module:LinearAlgebra.SparseMatrix}
 	 */
 	buildFlowOperator(M, h) {
-		// TODO
-
-		return SparseMatrix.identity(1, 1); // placeholder
+		let A=this.geometry.laplaceMatrix(this.vertexIndex);
+		A.scaleBy(h);
+		A.incrementBy(M);
+		return A;
 	}
 
 	/**
@@ -34,9 +35,19 @@ class MeanCurvatureFlow {
 	 */
 	integrate(h) {
 		let vertices = this.geometry.mesh.vertices;
-
-		// TODO
-
+		let f=DenseMatrix.zeros(vertices.length,3);
+		for (let v of vertices) {
+			let p=this.geometry.positions[v];
+			f.set(p.x,this.vertexIndex[v],0);
+			f.set(p.y,this.vertexIndex[v],1);
+			f.set(p.z,this.vertexIndex[v],2);
+		}
+		let M=this.geometry.massMatrix(this.vertexIndex);
+		let llt=this.buildFlowOperator(M,h).chol();
+		let g=llt.solvePositiveDefinite(M.timesDense(f));
+		for (let v of vertices) {
+			this.geometry.positions[v]=new Vector(g.get(this.vertexIndex[v],0),g.get(this.vertexIndex[v],1),g.get(this.vertexIndex[v],2));
+		}
 		// center mesh positions around origin
 		normalize(this.geometry.positions, vertices, false);
 	}

@@ -17,10 +17,10 @@ class ScalarPoissonProblem {
 		// index vertices
 		this.vertexIndex = indexElements(geometry.mesh.vertices);
 
-		// TODO: build the laplace and mass matrices, and compute total area
-		this.A = SparseMatrix.identity(1, 1); // placeholder
-		this.M = SparseMatrix.identity(1, 1); // placeholder
-		this.totalArea = 0.0; // placeholder
+		// build the laplace and mass matrices, and compute total area
+		this.A = geometry.laplaceMatrix(this.vertexIndex);
+		this.M = geometry.massMatrix(this.vertexIndex);
+		this.totalArea = geometry.totalArea();
 	}
 
 	/**
@@ -31,8 +31,10 @@ class ScalarPoissonProblem {
 	 * @returns {module:LinearAlgebra.DenseMatrix}
 	 */
 	solve(rho) {
-		// TODO
-
-		return DenseMatrix.zeros(rho.nRows(), 1); // placeholder
+		let b=this.M.timesDense(rho);
+		b=DenseMatrix.constant(b.sum()/this.totalArea,rho.nRows(),1);
+		b.decrementBy(rho);
+		let llt=this.A.chol();
+		return llt.solvePositiveDefinite(this.M.timesDense(b));
 	}
 }
