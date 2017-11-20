@@ -22,9 +22,10 @@ class MeanCurvatureFlow {
 	 * @returns {module:LinearAlgebra.SparseMatrix}
 	 */
 	buildFlowOperator(M, h) {
-		// TODO
+		let A = this.geometry.laplaceMatrix(this.vertexIndex);
 
-		return SparseMatrix.identity(1, 1); // placeholder
+		// F = M + hA
+		return M.plus(A.timesReal(h));
 	}
 
 	/**
@@ -33,9 +34,38 @@ class MeanCurvatureFlow {
 	 * @param {number} h The timestep.
 	 */
 	integrate(h) {
+		// build the flow and mass matrices
 		let vertices = this.geometry.mesh.vertices;
+		let V = vertices.length;
+		let M = this.geometry.massMatrix(this.vertexIndex);
+		let F = this.buildFlowOperator(M, h);
 
-		// TODO
+		// construct right hand side
+		let f0 = DenseMatrix.zeros(V, 3);
+		for (let v of vertices) {
+			let i = this.vertexIndex[v];
+			let p = this.geometry.positions[v];
+
+			f0.set(p.x, i, 0);
+			f0.set(p.y, i, 1);
+			f0.set(p.z, i, 2);
+		}
+
+		let rhs = M.timesDense(f0);
+
+		// solve linear system (M - hA)fh = Mf0
+		let llt = F.chol();
+		let fh = llt.solvePositiveDefinite(rhs);
+
+		// update positions
+		for (let v of vertices) {
+			let i = this.vertexIndex[v];
+			let p = this.geometry.positions[v];
+
+			p.x = fh.get(i, 0);
+			p.y = fh.get(i, 1);
+			p.z = fh.get(i, 2);
+		}
 
 		// center mesh positions around origin
 		normalize(this.geometry.positions, vertices, false);

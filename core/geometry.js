@@ -10,7 +10,7 @@ class Geometry {
 	 * @param {module:LinearAlgebra.Vector[]} positions An array containing the position of each vertex in a mesh.
 	 * @param {boolean} normalizePositions flag to indicate whether positions should be normalized. Default value is true.
 	 * @property {module:Core.Mesh} mesh The mesh this class describes the geometry of.
-	 * @property {module:LinearAlgebra.Vector[]} positions An array containing the normalized position of each vertex in a mesh.
+	 * @property {module:LinearAlgebra.Vector[]} positions A dictionary mapping each vertex to a normalized position.
 	 */
 	constructor(mesh, positions, normalizePositions = true) {
 		this.mesh = mesh;
@@ -187,9 +187,10 @@ class Geometry {
 	 * @returns {number} The angle clamped between 0 and π.
 	 */
 	angle(c) {
-		// TODO
+		let u = this.vector(c.halfedge.prev).unit();
+		let v = this.vector(c.halfedge.next).negated().unit();
 
-		return 0.0; // placeholder
+		return Math.acos(Math.max(-1.0, Math.min(1.0, u.dot(v))));
 	}
 
 	/**
@@ -215,9 +216,16 @@ class Geometry {
 	 * @returns {number} The dihedral angle.
 	 */
 	dihedralAngle(h) {
-		// TODO
+		if (h.onBoundary || h.twin.onBoundary) return 0.0;
 
-		return 0.0; // placeholder
+		let n1 = this.faceNormal(h.face);
+		let n2 = this.faceNormal(h.twin.face);
+		let w = this.vector(h).unit();
+
+		let cosTheta = n1.dot(n2);
+		let sinTheta = n1.cross(n2).dot(w);
+
+		return Math.atan2(sinTheta, cosTheta);
 	}
 
 	/**
@@ -243,9 +251,17 @@ class Geometry {
 	 * @returns {number}
 	 */
 	circumcentricDualArea(v) {
-		// TODO
+		let area = 0.0;
+		for (let h of v.adjacentHalfedges()) {
+			let u2 = this.vector(h.prev).norm2();
+			let v2 = this.vector(h).norm2();
+			let cotAlpha = this.cotan(h.prev);
+			let cotBeta = this.cotan(h);
 
-		return 0.0; // placeholder
+			area += (u2 * cotAlpha + v2 * cotBeta) / 8;
+		}
+
+		return area;
 	}
 
 	/**
@@ -274,9 +290,17 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.Vector}
 	 */
 	vertexNormalAreaWeighted(v) {
-		// TODO
+		let n = new Vector();
+		for (let f of v.adjacentFaces()) {
+			let normal = this.faceNormal(f);
+			let area = this.area(f);
 
-		return new Vector(); // placeholder
+			n.incrementBy(normal.times(area));
+		}
+
+		n.normalize();
+
+		return n;
 	}
 
 	/**
@@ -286,9 +310,17 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.Vector}
 	 */
 	vertexNormalAngleWeighted(v) {
-		// TODO
+		let n = new Vector();
+		for (let c of v.adjacentCorners()) {
+			let normal = this.faceNormal(c.halfedge.face);
+			let angle = this.angle(c);
 
-		return new Vector(); // placeholder
+			n.incrementBy(normal.times(angle));
+		}
+
+		n.normalize();
+
+		return n;
 	}
 
 	/**
@@ -298,9 +330,16 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.Vector}
 	 */
 	vertexNormalGaussCurvature(v) {
-		// TODO
+		let n = new Vector();
+		for (let h of v.adjacentHalfedges()) {
+			let weight = 0.5 * this.dihedralAngle(h) / this.length(h.edge);
 
-		return new Vector(); // placeholder
+			n.decrementBy(this.vector(h).times(weight));
+		}
+
+		n.normalize();
+
+		return n;
 	}
 
 	/**
@@ -310,9 +349,16 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.Vector}
 	 */
 	vertexNormalMeanCurvature(v) {
-		// TODO
+		let n = new Vector();
+		for (let h of v.adjacentHalfedges()) {
+			let weight = 0.5 * (this.cotan(h) + this.cotan(h.twin));
 
-		return new Vector(); // placeholder
+			n.decrementBy(this.vector(h).times(weight));
+		}
+
+		n.normalize();
+
+		return n;
 	}
 
 	/**
@@ -322,9 +368,17 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.Vector}
 	 */
 	vertexNormalSphereInscribed(v) {
-		// TODO
+		let n = new Vector();
+		for (let c of v.adjacentCorners()) {
+			let u = this.vector(c.halfedge.prev);
+			let v = this.vector(c.halfedge.next).negated();
 
-		return new Vector(); // placeholder
+			n.incrementBy(u.cross(v).over(u.norm2() * v.norm2()));
+		}
+
+		n.normalize();
+
+		return n;
 	}
 
 	/**
@@ -335,9 +389,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	angleDefect(v) {
-		// TODO
+		let angleSum = 0.0;
+		for (let c of v.adjacentCorners()) {
+			angleSum += this.angle(c);
+		}
 
-		return 0.0; // placeholder
+		return v.onBoundary() ? Math.PI - angleSum : 2 * Math.PI - angleSum;
 	}
 
 	/**
@@ -357,9 +414,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	scalarMeanCurvature(v) {
-		// TODO
+		let sum = 0.0;
+		for (let h of v.adjacentHalfedges()) {
+			sum += 0.5 * this.length(h.edge) * this.dihedralAngle(h);
+		}
 
-		return 0.0; // placeholder
+		return sum;
 	}
 
 	/**
@@ -368,9 +428,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	totalAngleDefect() {
-		// TODO
+		let totalDefect = 0.0;
+		for (let v of this.mesh.vertices) {
+			totalDefect += this.angleDefect(v);
+		}
 
-		return 0.0; // placeholder
+		return totalDefect;
 	}
 
 	/**
@@ -380,9 +443,18 @@ class Geometry {
 	 * @returns {number[]} An array containing the minimum and maximum principal curvature values at a vertex.
 	 */
 	principalCurvatures(v) {
-		// TODO
+		let A = this.circumcentricDualArea(v);
+		let H = this.scalarMeanCurvature(v) / A;
+		let K = this.angleDefect(v) / A;
 
-		return [0.0, 0.0]; // placeholder
+		let discriminant = H * H - K;
+		if (discriminant > 0) discriminant = Math.sqrt(discriminant);
+		else discriminant = 0;
+
+		let k1 = H - discriminant;
+		let k2 = H + discriminant;
+
+		return [k1, k2];
 	}
 
 	/**
@@ -394,9 +466,24 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.SparseMatrix}
 	 */
 	laplaceMatrix(vertexIndex) {
-		// TODO
+		let V = this.mesh.vertices.length;
+		let T = new Triplet(V, V);
+		for (let v of this.mesh.vertices) {
+			let i = vertexIndex[v];
+			let sum = 1e-8;
 
-		return SparseMatrix.identity(1, 1); // placeholder
+			for (let h of v.adjacentHalfedges()) {
+				let j = vertexIndex[h.twin.vertex];
+				let weight = (this.cotan(h) + this.cotan(h.twin)) / 2;
+				sum += weight;
+
+				T.addEntry(-weight, i, j);
+			}
+
+			T.addEntry(sum, i, i);
+		}
+
+		return SparseMatrix.fromTriplet(T);
 	}
 
 	/**
@@ -407,9 +494,15 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.SparseMatrix}
 	 */
 	massMatrix(vertexIndex) {
-		// TODO
+		let V = this.mesh.vertices.length;
+		let T = new Triplet(V, V);
+		for (let v of this.mesh.vertices) {
+			let i = vertexIndex[v];
 
-		return SparseMatrix.identity(1, 1); // placeholder
+			T.addEntry(this.barycentricDualArea(v), i, i);
+		}
+
+		return SparseMatrix.fromTriplet(T);
 	}
 
 	/**
