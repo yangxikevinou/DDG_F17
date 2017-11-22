@@ -21,17 +21,9 @@ class SpectralConformalParameterization {
 	 * @returns {module:LinearAlgebra.ComplexSparseMatrix}
 	 */
 	buildConformalEnergy() {
-		let nV=this.geometry.mesh.vertices.length;
-		let T=new ComplexTriplet(nV,nV);
-		for (let f of this.geometry.mesh.boundaries) {
-			for (let h of f.adjacentHalfedges()) {
-				let i=this.vertexIndex[h.vertex];
-				let j=this.vertexIndex[h.twin.vertex];
-				T.addEntry(new Complex(0.,-0.5),i,j);
-				T.addEntry(new Complex(0.,0.5),j,i);
-			}
-		}
-		return this.geometry.complexLaplaceMatrix(this.vertexIndex).minus(ComplexSparseMatrix.fromTriplet(T));
+		// TODO
+
+		return ComplexSparseMatrix.identity(1, 1); // placeholder
 	}
 
 	/**
@@ -40,13 +32,13 @@ class SpectralConformalParameterization {
 	 * @returns {Object} A dictionary mapping each vertex to a vector of planar coordinates.
 	 */
 	flatten() {
-		let A=this.buildConformalEnergy();
+		// TODO
 		let vertices = this.geometry.mesh.vertices;
-		let flattening = this.geometry.positions;
+		let flattening = this.geometry.positions; // placeholder
 
 		// normalize flattening
 		normalize(flattening, vertices);
 
-		return flattening;
+		return undefined; // placeholder, return flattening instead
 	}
 }

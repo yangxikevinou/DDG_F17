@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 class Geometry {
 	/**
@@ -187,24 +187,10 @@ class Geometry {
 	 * @returns {number} The angle clamped between 0 and π.
 	 */
 	angle(c) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		return Math.PI/2-Math.atan(this.cotan(c.halfedge));
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let u = this.vector(c.halfedge.prev).unit();
 		let v = this.vector(c.halfedge.next).negated().unit();
 
 		return Math.acos(Math.max(-1.0, Math.min(1.0, u.dot(v))));
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		return Math.PI/2-Math.atan(this.cotan(c.halfedge));
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -214,35 +200,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	cotan(h) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-		let u=this.vector(h.next).negated();
-		let v=this.vector(h.prev);
-		if (h.next.next=h.prev) {
-			return (u.dot(v))/((u.cross(v)).norm());
-		}
-		else {
-			return undefined;
-		}
-<<<<<<< HEAD
-=======
 		if (h.onBoundary) return 0.0;
 
 		let u = this.vector(h.prev);
 		let v = this.vector(h.next).negated();
 
 		return u.dot(v) / u.cross(v).norm();
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		if (h.onBoundary) return 0.0;
-
-		let u = this.vector(h.prev);
-		let v = this.vector(h.next).negated();
-
-		return u.dot(v) / u.cross(v).norm();
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -253,15 +216,6 @@ class Geometry {
 	 * @returns {number} The dihedral angle.
 	 */
 	dihedralAngle(h) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		let n1=this.faceNormal(h.face);
-		let n2=this.faceNormal(h.twin.face);		
-		return Math.atan2(this.vector(h).unit().dot(n1.cross(n2)),n1.dot(n2));
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		if (h.onBoundary || h.twin.onBoundary) return 0.0;
 
 		let n1 = this.faceNormal(h.face);
@@ -272,15 +226,6 @@ class Geometry {
 		let sinTheta = n1.cross(n2).dot(w);
 
 		return Math.atan2(sinTheta, cosTheta);
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		let n1=this.faceNormal(h.face);
-		let n2=this.faceNormal(h.twin.face);		
-		return Math.atan2(this.vector(h).unit().dot(n1.cross(n2)),n1.dot(n2));
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -290,26 +235,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	barycentricDualArea(v) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-		let a=0.0;
-		for (let f of v.adjacentFaces()){
-			a+=this.area(f);
-		}
-		return a/3;
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let area = 0.0;
 		for (let f of v.adjacentFaces()) {
 			area += this.area(f) / 3;
 		}
 
 		return area;
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 
 	/**
@@ -320,21 +251,6 @@ class Geometry {
 	 * @returns {number}
 	 */
 	circumcentricDualArea(v) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
-		let a=0.;
-		for (let h of v.adjacentHalfedges()){
-			a+=this.cotan(h)*Math.pow(this.length(h.edge),2);
-			h=h.twin;
-			a+=this.cotan(h)*Math.pow(this.length(h.edge),2);
-		}
-		return a/8;
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let area = 0.0;
 		for (let h of v.adjacentHalfedges()) {
 			let u2 = this.vector(h.prev).norm2();
@@ -346,10 +262,6 @@ class Geometry {
 		}
 
 		return area;
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 
 	/**
@@ -380,35 +292,14 @@ class Geometry {
 	vertexNormalAreaWeighted(v) {
 		let n = new Vector();
 		for (let f of v.adjacentFaces()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-			n.incrementBy(this.faceNormal(f).times(this.area(f)));
-		}
-		n.normalize();
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 			let normal = this.faceNormal(f);
 			let area = this.area(f);
 
 			n.incrementBy(normal.times(area));
 		}
-<<<<<<< HEAD
 
 		n.normalize();
 
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-
-		n.normalize();
-
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-			n.incrementBy(this.faceNormal(f).times(this.area(f)));
-		}
-		n.normalize();
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		return n;
 	}
 
@@ -421,15 +312,6 @@ class Geometry {
 	vertexNormalAngleWeighted(v) {
 		let n = new Vector();
 		for (let c of v.adjacentCorners()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-			n.incrementBy(this.faceNormal(c.face).times(this.angle(c)));
-		}
-		n.normalize();
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 			let normal = this.faceNormal(c.halfedge.face);
 			let angle = this.angle(c);
 
@@ -438,15 +320,6 @@ class Geometry {
 
 		n.normalize();
 
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-			n.incrementBy(this.faceNormal(c.face).times(this.angle(c)));
-		}
-		n.normalize();
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		return n;
 	}
 
@@ -459,15 +332,6 @@ class Geometry {
 	vertexNormalGaussCurvature(v) {
 		let n = new Vector();
 		for (let h of v.adjacentHalfedges()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-			if (!h.onBoundary) n.incrementBy(this.vector(h).unit().times(this.dihedralAngle(h)));
-		}
-		n.normalize();
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 			let weight = 0.5 * this.dihedralAngle(h) / this.length(h.edge);
 
 			n.decrementBy(this.vector(h).times(weight));
@@ -475,15 +339,6 @@ class Geometry {
 
 		n.normalize();
 
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-			if (!h.onBoundary) n.incrementBy(this.vector(h).unit().times(this.dihedralAngle(h)));
-		}
-		n.normalize();
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		return n;
 	}
 
@@ -496,13 +351,6 @@ class Geometry {
 	vertexNormalMeanCurvature(v) {
 		let n = new Vector();
 		for (let h of v.adjacentHalfedges()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-			if (!h.onBoundary) n.incrementBy(this.vector(h).times(this.cotan(h)+this.cotan(h.twin)));
-		}
-		n.normalize();
-=======
 			let weight = 0.5 * (this.cotan(h) + this.cotan(h.twin));
 
 			n.decrementBy(this.vector(h).times(weight));
@@ -510,21 +358,6 @@ class Geometry {
 
 		n.normalize();
 
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-			let weight = 0.5 * (this.cotan(h) + this.cotan(h.twin));
-
-			n.decrementBy(this.vector(h).times(weight));
-		}
-
-		n.normalize();
-
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-			if (!h.onBoundary) n.incrementBy(this.vector(h).times(this.cotan(h)+this.cotan(h.twin)));
-		}
-		n.normalize();
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		return n;
 	}
 
@@ -536,22 +369,6 @@ class Geometry {
 	 */
 	vertexNormalSphereInscribed(v) {
 		let n = new Vector();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
-		for (let h1 of v.adjacentHalfedges()) {
-			let h2=h1.prev;
-			if (!(h1.onBoundary && h2.onBoundary)) {
-				h1=this.vector(h1);
-				h2=this.vector(h2).negated();
-				n.incrementBy(h1.cross(h2).over(Math.pow(h1.norm()*h2.norm(),2)));
-			}
-		}
-		n.normalize();
-<<<<<<< HEAD
-=======
 		for (let c of v.adjacentCorners()) {
 			let u = this.vector(c.halfedge.prev);
 			let v = this.vector(c.halfedge.next).negated();
@@ -561,20 +378,6 @@ class Geometry {
 
 		n.normalize();
 
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		for (let c of v.adjacentCorners()) {
-			let u = this.vector(c.halfedge.prev);
-			let v = this.vector(c.halfedge.next).negated();
-
-			n.incrementBy(u.cross(v).over(u.norm2() * v.norm2()));
-		}
-
-		n.normalize();
-
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		return n;
 	}
 
@@ -586,31 +389,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	angleDefect(v) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
-		let a=0.;
-		for (let c of v.adjacentCorners()) a+=this.angle(c);
-		if (v.onBoundary()) return Math.PI-a;
-		else return 2.*Math.PI-a;
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let angleSum = 0.0;
 		for (let c of v.adjacentCorners()) {
 			angleSum += this.angle(c);
 		}
 
 		return v.onBoundary() ? Math.PI - angleSum : 2 * Math.PI - angleSum;
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -630,30 +414,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	scalarMeanCurvature(v) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		let H=0;
-		for (let h of v.adjacentHalfedges()) H+=this.dihedralAngle(h)*this.length(h.edge);
-		return H/2.;
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let sum = 0.0;
 		for (let h of v.adjacentHalfedges()) {
 			sum += 0.5 * this.length(h.edge) * this.dihedralAngle(h);
 		}
 
 		return sum;
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		let H=0;
-		for (let h of v.adjacentHalfedges()) H+=this.dihedralAngle(h)*this.length(h.edge);
-		return H/2.;
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -662,26 +428,12 @@ class Geometry {
 	 * @returns {number}
 	 */
 	totalAngleDefect() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		return 2.*Math.PI*this.mesh.eulerCharacteristic();
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let totalDefect = 0.0;
 		for (let v of this.mesh.vertices) {
 			totalDefect += this.angleDefect(v);
 		}
 
 		return totalDefect;
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		return 2.*Math.PI*this.mesh.eulerCharacteristic();
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -691,19 +443,6 @@ class Geometry {
 	 * @returns {number[]} An array containing the minimum and maximum principal curvature values at a vertex.
 	 */
 	principalCurvatures(v) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
-		let H=this.scalarMeanCurvature(v)/this.circumcentricDualArea(v);
-		let K=this.scalarGaussCurvature(v)/this.circumcentricDualArea(v);
-		K=Math.sqrt(H*H-K);
-		return [H-K, H+K];
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let A = this.circumcentricDualArea(v);
 		let H = this.scalarMeanCurvature(v) / A;
 		let K = this.angleDefect(v) / A;
@@ -711,22 +450,11 @@ class Geometry {
 		let discriminant = H * H - K;
 		if (discriminant > 0) discriminant = Math.sqrt(discriminant);
 		else discriminant = 0;
-<<<<<<< HEAD
 
 		let k1 = H - discriminant;
 		let k2 = H + discriminant;
 
 		return [k1, k2];
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-
-		let k1 = H - discriminant;
-		let k2 = H + discriminant;
-
-		return [k1, k2];
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -738,26 +466,6 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.SparseMatrix}
 	 */
 	laplaceMatrix(vertexIndex) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
-		let VS=this.mesh.vertices;
-		let T=new Triplet(VS.length,VS.length);
-		for (let v of VS) {
-			let a=0.;
-			for (let h of v.adjacentHalfedges()) {
-				let b=0.5*(this.cotan(h)+this.cotan(h.twin));
-				T.addEntry(-b,vertexIndex[v],vertexIndex[h.twin.vertex]);
-				a+=b;
-			}
-			T.addEntry(a+1e-8,vertexIndex[v],vertexIndex[v]);
-		}
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let V = this.mesh.vertices.length;
 		let T = new Triplet(V, V);
 		for (let v of this.mesh.vertices) {
@@ -775,12 +483,6 @@ class Geometry {
 			T.addEntry(sum, i, i);
 		}
 
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		return SparseMatrix.fromTriplet(T);
 	}
 
@@ -792,19 +494,6 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.SparseMatrix}
 	 */
 	massMatrix(vertexIndex) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
-		let VS=this.mesh.vertices;
-		let d=DenseMatrix.zeros(VS.length,1);
-		for (let v of VS) d.set(this.barycentricDualArea(v),vertexIndex[v],0);
-		return SparseMatrix.diag(d);
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let V = this.mesh.vertices.length;
 		let T = new Triplet(V, V);
 		for (let v of this.mesh.vertices) {
@@ -814,12 +503,6 @@ class Geometry {
 		}
 
 		return SparseMatrix.fromTriplet(T);
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -831,18 +514,9 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.ComplexSparseMatrix}
 	 */
 	complexLaplaceMatrix(vertexIndex) {
-		let VS=this.mesh.vertices;
-		let T=new ComplexTriplet(VS.length,VS.length);
-		for (let v of VS) {
-			let a=0.;
-			for (let h of v.adjacentHalfedges()) {
-				let b=0.5*(this.cotan(h)+this.cotan(h.twin));
-				T.addEntry(new Complex(-b,0.),vertexIndex[v],vertexIndex[h.twin.vertex]);
-				a+=b;
-			}
-			T.addEntry(new Complex(a+1e-8,0.),vertexIndex[v],vertexIndex[v]);
-		}
-		return ComplexSparseMatrix.fromTriplet(T);
+		// TODO
+
+		return ComplexSparseMatrix.identity(1, 1); // placeholder
 	}
 }
 

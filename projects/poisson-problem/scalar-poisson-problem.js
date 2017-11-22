@@ -17,19 +17,7 @@ class ScalarPoissonProblem {
 		// index vertices
 		this.vertexIndex = indexElements(geometry.mesh.vertices);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		// build the laplace and mass matrices, and compute total area
-=======
 		// build laplace and mass matrices
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		// build laplace and mass matrices
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
-		// build the laplace and mass matrices, and compute total area
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		this.A = geometry.laplaceMatrix(this.vertexIndex);
 		this.M = geometry.massMatrix(this.vertexIndex);
 		this.totalArea = geometry.totalArea();
@@ -43,20 +31,6 @@ class ScalarPoissonProblem {
 	 * @returns {module:LinearAlgebra.DenseMatrix}
 	 */
 	solve(rho) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
-		let b=this.M.timesDense(rho);
-		b=DenseMatrix.constant(b.sum()/this.totalArea,rho.nRows(),1);
-		b.decrementBy(rho);
-		let llt=this.A.chol();
-		return llt.solvePositiveDefinite(this.M.timesDense(b));
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		// construct right hand side
 		let V = this.M.nRows();
 		let totalRho = this.M.timesDense(rho).sum();
@@ -68,11 +42,5 @@ class ScalarPoissonProblem {
 		let phi = llt.solvePositiveDefinite(rhs);
 
 		return phi;
-<<<<<<< HEAD
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
-=======
->>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 }
