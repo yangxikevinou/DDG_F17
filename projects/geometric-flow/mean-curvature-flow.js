@@ -24,10 +24,14 @@ class MeanCurvatureFlow {
 	buildFlowOperator(M, h) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		let A=this.geometry.laplaceMatrix(this.vertexIndex);
 		A.scaleBy(h);
 		A.incrementBy(M);
 		return A;
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
@@ -39,6 +43,8 @@ class MeanCurvatureFlow {
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 =======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
+>>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 	}
 
 	/**
@@ -51,6 +57,9 @@ class MeanCurvatureFlow {
 		let vertices = this.geometry.mesh.vertices;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		let f=DenseMatrix.zeros(vertices.length,3);
 		for (let v of vertices) {
 			let p=this.geometry.positions[v];
@@ -64,6 +73,7 @@ class MeanCurvatureFlow {
 		for (let v of vertices) {
 			this.geometry.positions[v]=new Vector(g.get(this.vertexIndex[v],0),g.get(this.vertexIndex[v],1),g.get(this.vertexIndex[v],2));
 		}
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
@@ -123,6 +133,8 @@ class MeanCurvatureFlow {
 		}
 
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
+>>>>>>> 938cdf2889e021d8e4503139399a425641a2de14
 		// center mesh positions around origin
 		normalize(this.geometry.positions, vertices, false);
 	}
