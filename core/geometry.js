@@ -454,9 +454,18 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.ComplexSparseMatrix}
 	 */
 	complexLaplaceMatrix(vertexIndex) {
-		// TODO
-
-		return ComplexSparseMatrix.identity(1, 1); // placeholder
+		let VS=this.mesh.vertices;
+		let T=new ComplexTriplet(VS.length,VS.length);
+		for (let v of VS) {
+			let a=0.;
+			for (let h of v.adjacentHalfedges()) {
+				let b=0.5*(this.cotan(h)+this.cotan(h.twin));
+				T.addEntry(new Complex(-b,0.),vertexIndex[v],vertexIndex[h.twin.vertex]);
+				a+=b;
+			}
+			T.addEntry(new Complex(a+1e-8,0.),vertexIndex[v],vertexIndex[v]);
+		}
+		return ComplexSparseMatrix.fromTriplet(T);
 	}
 }
 

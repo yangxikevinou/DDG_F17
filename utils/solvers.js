@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 /**
  * This class implements frequently used numerical algorithms such as the inverse power method.
@@ -14,9 +14,8 @@ class Solvers {
 	 * @returns {number}
 	 */
 	static residual(A, x) {
-		// TODO
-
-		return 0.0; // placeholder
+		let y=A.timesDense(x);
+		return y.minus(x.transpose().timesDense(y.conjugate()).timesDense(x)).norm(2);
 	}
 
 	/**
@@ -29,9 +28,14 @@ class Solvers {
 	 * smallest eigenvalue λ) of A.
 	 */
 	static solveInversePowerMethod(A) {
-		// TODO
-
-		return ComplexDenseMatrix.zeros(1, 1); // placeholder
+		let x=random(A.nRows(),1);
+		let lu=A.lu();
+		while (this.residual(A,x)>1e-10) {
+			x=lu.solveSquare(x);
+			x.decrementBy(sum(x));
+			x.scaleBy(x.norm(2).inverse());
+		}
+		return x;
 	}
 
 	/**
