@@ -22,9 +22,17 @@ class MeanCurvatureFlow {
 	 * @returns {module:LinearAlgebra.SparseMatrix}
 	 */
 	buildFlowOperator(M, h) {
-		// TODO
+<<<<<<< HEAD
+		let A=this.geometry.laplaceMatrix(this.vertexIndex);
+		A.scaleBy(h);
+		A.incrementBy(M);
+		return A;
+=======
+		let A = this.geometry.laplaceMatrix(this.vertexIndex);
 
-		return SparseMatrix.identity(1, 1); // placeholder
+		// F = M + hA
+		return M.plus(A.timesReal(h));
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 
 	/**
@@ -33,10 +41,55 @@ class MeanCurvatureFlow {
 	 * @param {number} h The timestep.
 	 */
 	integrate(h) {
+		// build the flow and mass matrices
 		let vertices = this.geometry.mesh.vertices;
+<<<<<<< HEAD
+		let f=DenseMatrix.zeros(vertices.length,3);
+		for (let v of vertices) {
+			let p=this.geometry.positions[v];
+			f.set(p.x,this.vertexIndex[v],0);
+			f.set(p.y,this.vertexIndex[v],1);
+			f.set(p.z,this.vertexIndex[v],2);
+		}
+		let M=this.geometry.massMatrix(this.vertexIndex);
+		let llt=this.buildFlowOperator(M,h).chol();
+		let g=llt.solvePositiveDefinite(M.timesDense(f));
+		for (let v of vertices) {
+			this.geometry.positions[v]=new Vector(g.get(this.vertexIndex[v],0),g.get(this.vertexIndex[v],1),g.get(this.vertexIndex[v],2));
+		}
+=======
+		let V = vertices.length;
+		let M = this.geometry.massMatrix(this.vertexIndex);
+		let F = this.buildFlowOperator(M, h);
 
-		// TODO
+		// construct right hand side
+		let f0 = DenseMatrix.zeros(V, 3);
+		for (let v of vertices) {
+			let i = this.vertexIndex[v];
+			let p = this.geometry.positions[v];
 
+			f0.set(p.x, i, 0);
+			f0.set(p.y, i, 1);
+			f0.set(p.z, i, 2);
+		}
+
+		let rhs = M.timesDense(f0);
+
+		// solve linear system (M - hA)fh = Mf0
+		let llt = F.chol();
+		let fh = llt.solvePositiveDefinite(rhs);
+
+		// update positions
+		for (let v of vertices) {
+			let i = this.vertexIndex[v];
+			let p = this.geometry.positions[v];
+
+			p.x = fh.get(i, 0);
+			p.y = fh.get(i, 1);
+			p.z = fh.get(i, 2);
+		}
+
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		// center mesh positions around origin
 		normalize(this.geometry.positions, vertices, false);
 	}

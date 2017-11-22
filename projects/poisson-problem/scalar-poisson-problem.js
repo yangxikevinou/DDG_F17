@@ -17,10 +17,14 @@ class ScalarPoissonProblem {
 		// index vertices
 		this.vertexIndex = indexElements(geometry.mesh.vertices);
 
-		// TODO: build the laplace and mass matrices, and compute total area
-		this.A = SparseMatrix.identity(1, 1); // placeholder
-		this.M = SparseMatrix.identity(1, 1); // placeholder
-		this.totalArea = 0.0; // placeholder
+<<<<<<< HEAD
+		// build the laplace and mass matrices, and compute total area
+=======
+		// build laplace and mass matrices
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+		this.A = geometry.laplaceMatrix(this.vertexIndex);
+		this.M = geometry.massMatrix(this.vertexIndex);
+		this.totalArea = geometry.totalArea();
 	}
 
 	/**
@@ -31,8 +35,24 @@ class ScalarPoissonProblem {
 	 * @returns {module:LinearAlgebra.DenseMatrix}
 	 */
 	solve(rho) {
-		// TODO
+<<<<<<< HEAD
+		let b=this.M.timesDense(rho);
+		b=DenseMatrix.constant(b.sum()/this.totalArea,rho.nRows(),1);
+		b.decrementBy(rho);
+		let llt=this.A.chol();
+		return llt.solvePositiveDefinite(this.M.timesDense(b));
+=======
+		// construct right hand side
+		let V = this.M.nRows();
+		let totalRho = this.M.timesDense(rho).sum();
+		let rhoBar = DenseMatrix.ones(V, 1).timesReal(totalRho / this.totalArea);
+		let rhs = this.M.timesDense(rhoBar.minus(rho));
 
-		return DenseMatrix.zeros(rho.nRows(), 1); // placeholder
+		// solve linear system
+		let llt = this.A.chol();
+		let phi = llt.solvePositiveDefinite(rhs);
+
+		return phi;
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 }
