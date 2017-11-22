@@ -23,15 +23,21 @@ class MeanCurvatureFlow {
 	 */
 	buildFlowOperator(M, h) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		let A=this.geometry.laplaceMatrix(this.vertexIndex);
 		A.scaleBy(h);
 		A.incrementBy(M);
 		return A;
 =======
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let A = this.geometry.laplaceMatrix(this.vertexIndex);
 
 		// F = M + hA
 		return M.plus(A.timesReal(h));
+<<<<<<< HEAD
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 
@@ -43,6 +49,7 @@ class MeanCurvatureFlow {
 	integrate(h) {
 		// build the flow and mass matrices
 		let vertices = this.geometry.mesh.vertices;
+<<<<<<< HEAD
 <<<<<<< HEAD
 		let f=DenseMatrix.zeros(vertices.length,3);
 		for (let v of vertices) {
@@ -58,6 +65,8 @@ class MeanCurvatureFlow {
 			this.geometry.positions[v]=new Vector(g.get(this.vertexIndex[v],0),g.get(this.vertexIndex[v],1),g.get(this.vertexIndex[v],2));
 		}
 =======
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let V = vertices.length;
 		let M = this.geometry.massMatrix(this.vertexIndex);
 		let F = this.buildFlowOperator(M, h);
@@ -67,6 +76,30 @@ class MeanCurvatureFlow {
 		for (let v of vertices) {
 			let i = this.vertexIndex[v];
 			let p = this.geometry.positions[v];
+<<<<<<< HEAD
+=======
+
+			f0.set(p.x, i, 0);
+			f0.set(p.y, i, 1);
+			f0.set(p.z, i, 2);
+		}
+
+		let rhs = M.timesDense(f0);
+
+		// solve linear system (M - hA)fh = Mf0
+		let llt = F.chol();
+		let fh = llt.solvePositiveDefinite(rhs);
+
+		// update positions
+		for (let v of vertices) {
+			let i = this.vertexIndex[v];
+			let p = this.geometry.positions[v];
+
+			p.x = fh.get(i, 0);
+			p.y = fh.get(i, 1);
+			p.z = fh.get(i, 2);
+		}
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 
 			f0.set(p.x, i, 0);
 			f0.set(p.y, i, 1);

@@ -15,6 +15,7 @@ class DEC {
 	 */
 	static buildHodgeStar0Form(geometry, vertexIndex) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		let VS=geometry.mesh.vertices;
 		let d=DenseMatrix.zeros(VS.length,1);
 		for (let v of VS){
@@ -24,6 +25,8 @@ class DEC {
 		}
 		return SparseMatrix.diag(d);
 =======
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let vertices = geometry.mesh.vertices;
 		let V = vertices.length;
 		let T = new Triplet(V, V);
@@ -35,6 +38,9 @@ class DEC {
 		}
 
 		return SparseMatrix.fromTriplet(T);
+<<<<<<< HEAD
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 
@@ -47,6 +53,7 @@ class DEC {
 	 */
 	static buildHodgeStar1Form(geometry, edgeIndex) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		let ES=geometry.mesh.edges;
 		let d=DenseMatrix.zeros(ES.length,1);
 		for (let e of ES){
@@ -57,6 +64,8 @@ class DEC {
 		}
 		return SparseMatrix.diag(d);
 =======
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let edges = geometry.mesh.edges;
 		let E = edges.length;
 		let T = new Triplet(E, E);
@@ -68,6 +77,9 @@ class DEC {
 		}
 
 		return SparseMatrix.fromTriplet(T);
+<<<<<<< HEAD
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 
@@ -81,6 +93,7 @@ class DEC {
 	 */
 	static buildHodgeStar2Form(geometry, faceIndex) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		let FS=geometry.mesh.faces;
 		let d=DenseMatrix.zeros(FS.length,1);
 		for (let f of FS){
@@ -88,6 +101,8 @@ class DEC {
 		}
 		return SparseMatrix.diag(d);
 =======
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let faces = geometry.mesh.faces;
 		let F = faces.length;
 		let T = new Triplet(F, F);
@@ -99,6 +114,9 @@ class DEC {
 		}
 
 		return SparseMatrix.fromTriplet(T);
+<<<<<<< HEAD
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 	}
 
@@ -112,6 +130,7 @@ class DEC {
 	 */
 	static buildExteriorDerivative0Form(geometry, edgeIndex, vertexIndex) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		let VS=geometry.mesh.vertices;
 		let ES=geometry.mesh.edges;
 		let T=new Triplet(ES.length,VS.length);
@@ -121,6 +140,8 @@ class DEC {
 			T.addEntry(1,edgeIndex[e],vertexIndex[h.twin.vertex]);
 		}
 =======
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let edges = geometry.mesh.edges;
 		let vertices = geometry.mesh.vertices;
 		let E = edges.length;
@@ -135,6 +156,9 @@ class DEC {
 			T.addEntry(-1, i, k);
 		}
 
+<<<<<<< HEAD
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		return SparseMatrix.fromTriplet(T);
 	}
@@ -149,6 +173,7 @@ class DEC {
 	 */
 	static buildExteriorDerivative1Form(geometry, faceIndex, edgeIndex) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		let ES=geometry.mesh.edges;
 		let FS=geometry.mesh.faces;
 		let T=new Triplet(FS.length,ES.length);
@@ -160,6 +185,8 @@ class DEC {
 			}
 		}
 =======
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		let faces = geometry.mesh.faces;
 		let edges = geometry.mesh.edges;
 		let F = faces.length;
@@ -176,6 +203,9 @@ class DEC {
 			}
 		}
 
+<<<<<<< HEAD
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
+=======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		return SparseMatrix.fromTriplet(T);
 	}

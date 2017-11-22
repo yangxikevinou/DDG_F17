@@ -491,6 +491,7 @@ describe("Geometry", function() {
 				let [k1, k2] = geometry.principalCurvatures(v);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 				// Hot fix: some values of k1 and k2 are incorrectly swapped in solution.js
@@ -499,6 +500,11 @@ describe("Geometry", function() {
 
 
 
+=======
+				// Hot fix: some values of k1 and k2 are incorrectly swapped in solution.js
+				if (Math.abs(k1) > Math.abs(k2)) k1 = [k2, k2 = k1][0];
+
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 =======
 				// Hot fix: some values of k1 and k2 are incorrectly swapped in solution.js
 				if (Math.abs(k1) > Math.abs(k2)) k1 = [k2, k2 = k1][0];

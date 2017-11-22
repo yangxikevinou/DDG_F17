@@ -11,8 +11,11 @@ class ModifiedMeanCurvatureFlow extends MeanCurvatureFlow {
 	constructor(geometry) {
 		super(geometry);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		// build the laplace matrix
+=======
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 =======
 >>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 		this.A = geometry.laplaceMatrix(this.vertexIndex);
@@ -23,7 +26,12 @@ class ModifiedMeanCurvatureFlow extends MeanCurvatureFlow {
 	 */
 	buildFlowOperator(M, h) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		return this.A.timesReal(h).plus(M);
+=======
+		// F = M + hA
+		return M.plus(this.A.timesReal(h));
+>>>>>>> 14617552d87fdb8f123aaad0ed286f6e1bc62ca5
 =======
 		// F = M + hA
 		return M.plus(this.A.timesReal(h));
