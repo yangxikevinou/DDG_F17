@@ -1,3 +1,4 @@
+﻿
 "use strict";
 
 /**
@@ -14,9 +15,8 @@ class Solvers {
 	 * @returns {number}
 	 */
 	static residual(A, x) {
-		// TODO
-
-		return 0.0; // placeholder
+		let y=A.timesDense(x);
+		return y.minus(x.timesDense(x.transpose().timesDense(y.conjugate()))).norm(2); 
 	}
 
 	/**
@@ -29,9 +29,15 @@ class Solvers {
 	 * smallest eigenvalue λ) of A.
 	 */
 	static solveInversePowerMethod(A) {
-		// TODO
-
-		return ComplexDenseMatrix.zeros(1, 1); // placeholder
+		let N=A.nRows();
+		let x=ComplexDenseMatrix.random(N,1);
+		let lu=A.lu();
+		while (this.residual(A,x)>1e-10) {
+			x=lu.solveSquare(x);
+			x.decrementBy(ComplexDenseMatrix.constant(x.sum().overReal(N),N,1));
+			x.scaleBy(new Complex(1./x.norm(2),0.));
+		}
+		return x;
 	}
 
 	/**

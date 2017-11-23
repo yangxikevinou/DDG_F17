@@ -1,3 +1,4 @@
+﻿
 "use strict";
 
 class Geometry {
@@ -514,9 +515,24 @@ class Geometry {
 	 * @returns {module:LinearAlgebra.ComplexSparseMatrix}
 	 */
 	complexLaplaceMatrix(vertexIndex) {
-		// TODO
+		let V = this.mesh.vertices.length;
+		let T = new ComplexTriplet(V, V);
+		for (let v of this.mesh.vertices) {
+			let i = vertexIndex[v];
+			let sum = 1e-8;
 
-		return ComplexSparseMatrix.identity(1, 1); // placeholder
+			for (let h of v.adjacentHalfedges()) {
+				let j = vertexIndex[h.twin.vertex];
+				let weight = (this.cotan(h) + this.cotan(h.twin)) / 2;
+				sum += weight;
+
+				T.addEntry(new Complex(-weight,0.), i, j);
+			}
+
+			T.addEntry(new Complex(sum,0.), i, i);
+		}
+
+		return ComplexSparseMatrix.fromTriplet(T);
 	}
 }
 
