@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 class GeodesicsInHeat {
 	/**
@@ -15,9 +15,8 @@ class GeodesicsInHeat {
 		this.geometry = geometry;
 		this.vertexIndex = indexElements(geometry.mesh.vertices);
 
-		// TODO: build laplace and flow matrices
-		this.A = SparseMatrix.identity(1, 1); // placeholder
-		this.F = SparseMatrix.identity(1, 1); // placeholder
+		this.A = geometry.laplaceMatrix(this.vertexIndex);
+		this.F = geometry.massMatrix(this.vertexIndex).plus(this.A.timesReal(Math.pow(geometry.meanEdgeLength(),2)));
 	}
 
 	/**
@@ -29,9 +28,20 @@ class GeodesicsInHeat {
 	 * @returns {Object} A dictionary mapping each face of the input mesh to a {@link module:LinearAlgebra.Vector Vector}.
 	 */
 	computeVectorField(u) {
-		// TODO
-
-		return {}; // placeholder
+		let X={};
+		let G=this.geometry;
+		for (let f of G.mesh.faces) {
+			if (!f.isBoundaryLoop()) {
+				let x=new Vector();
+				for (let h of f.adjacentHalfedges()) {
+					x.decrementBy(G.vector(h).times(u.get(this.vertexIndex[h.prev.vertex],0)));
+				}
+				x=G.faceNormal(f).cross(x);
+				x.normalize();
+				X[f]=x;
+			}
+		}
+		return X;
 	}
 
 	/**
@@ -42,10 +52,20 @@ class GeodesicsInHeat {
 	 * mapping each face of the input mesh to a {@link module:LinearAlgebra.Vector Vector}.
 	 * @returns {module:LinearAlgebra.DenseMatrix}
 	 */
-	computeDivergence(X) {
-		// TODO
-
-		return DenseMatrix.zeros(1, 1); // placeholder
+	computeDivergence(X) {		
+		let G=this.geometry;
+		let VS=G.mesh.vertices;
+		let div=DenseMatrix.zeros(VS.length,1);
+		for (let v of VS) {
+			let D=0.;
+			for (let h of v.adjacentHalfedges()) {
+				D+=G.cotan(h)*(G.vector(h).dot(X[h.face]));
+				h=h.twin;
+				D-=G.cotan(h)*(G.vector(h).dot(X[h.face]));
+			}
+			div.set(D/2,this.vertexIndex[v],0);
+		}
+		return div;
 	}
 
 	/**
@@ -73,8 +93,11 @@ class GeodesicsInHeat {
 	 * @returns {module:LinearAlgebra.DenseMatrix}
 	 */
 	compute(delta) {
-		// TODO
-		let phi = DenseMatrix.zeros(delta.nRows(), 1); // placeholder
+		let Ffac=this.F.chol();
+		let Afac=this.A.chol();
+		let phi=delta;
+		phi=this.computeVectorField(Ffac.solvePositiveDefinite(phi));
+		phi=Afac.solvePositiveDefinite(this.computeDivergence(phi).timesReal(-1.));		
 
 		// since φ is unique up to an additive constant, it should
 		// be shifted such that the smallest distance is zero
